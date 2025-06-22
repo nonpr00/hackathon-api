@@ -1,5 +1,5 @@
-org: organizacion
-service: auth-service
+org: onlyuml
+service: diagrams-serverless
 
 provider:
   name: aws
