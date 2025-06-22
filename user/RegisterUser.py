@@ -1,60 +1,45 @@
-import boto3
-import hashlib
+import json
 
-# Hashear contraseña
-def hash_password(password):
-    # Retorna la contraseña hasheada
-    return hashlib.sha256(password.encode()).hexdigest()
-
-# Función que maneja el registro de user y validación del password
 def lambda_handler(event, context):
     try:
-        # Obtener el email y el password
-        user_id = event['body']['user_id']
-        #get('user_id')
-        #event['body']['tenant_id']
-        password = event['body']['password']
-        #get('password')
-        
-        # Verificar que el email y el password existen
-        if user_id and password:
-            # Hashea la contraseña antes de almacenarla
-            hashed_password = hash_password(password)
-            # Conectar DynamoDB
-            dynamodb = boto3.resource('dynamodb')
-            t_usuarios = dynamodb.Table('t_users')
-            # Almacena los datos del user en la tabla de usuarios en DynamoDB
-            t_usuarios.put_item(
-                Item={
-                    'user_id': user_id,
-                    'password': hashed_password,
-                }
-            )
-            # Retornar un código de estado HTTP 200 (OK) y un mensaje de éxito
-            mensaje = {
-                'message': 'User registered successfully',
-                'user_id': user_id
-            }
+        # Asegurarse de que 'body' exista y sea un diccionario
+        if 'body' not in event:
             return {
-                'statusCode': 200,
-                'body': mensaje
-            }
-        else:
-            mensaje = {
-                'error': 'Invalid request body: missing user_id or password'
-            }
-            return {
-                'statusCode': 400,
-                'body': mensaje
+                "statusCode": 400,
+                "body": json.dumps({"error": "No se encontró el body en el request"})
             }
 
-    except Exception as e:
-        # Excepción y retornar un código de error HTTP 500
-        print("Exception:", str(e))
-        mensaje = {
-            'error': str(e)
-        }        
+        # Si body viene como string (caso común en API Gateway)
+        if isinstance(event['body'], str):
+            body = json.loads(event['body'])
+        else:
+            body = event['body']
+
+        # Validación obligatoria
+        required_fields = ['email', 'username', 'password']
+        for field in required_fields:
+            if field not in body or not body[field]:
+                return {
+                    "statusCode": 400,
+                    "body": json.dumps({"error": f"El campo '{field}' es obligatorio"})
+                }
+
+        email = body['email']
+        username = body['username']
+        password = body['password']
+
+        # Aquí va tu lógica de registro o validación
         return {
-            'statusCode': 500,
-            'body': mensaje
+            "statusCode": 200,
+            "body": json.dumps({
+                "message": "Datos recibidos correctamente",
+                "email": email,
+                "username": username
+            })
+        }
+
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": f"Error interno: {str(e)}"})
         }
