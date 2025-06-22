@@ -40,10 +40,10 @@ functions:
           integration: lambda-proxy
     timeout: 29
   WithJSON:
-    handler: user/WithJSON.lambda_handler
+    handler: diagrams/WithJSON.lambda_handler
     events:
       - http:
-          path: user/with-json
+          path: diagrams/with-json
           method: post
           cors:
             origin: http://localhost:5173
