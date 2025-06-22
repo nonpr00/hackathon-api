@@ -47,7 +47,7 @@ def lambda_handler(event, context):
                 'token': token,
                 'expires': fecha_hora_exp.strftime('%Y-%m-%d %H:%M:%S')
             }
-            table = dynamodb.Table('t_tokens_acceso')
+            table = dynamodb.Table('t_tokens_access')
             table.put_item(Item=registro)
 
             return {

@@ -42,7 +42,7 @@ def lambda_handler(event, context):
 
         # Obtener info del usuario
         user_id = token_item['user_id']
-        users_table = dynamodb.Table('t_usuarios')  # Asegúrate que el nombre sea correcto
+        users_table = dynamodb.Table('t_users')  # Asegúrate que el nombre sea correcto
         user_response = users_table.get_item(Key={'user_id': user_id})
 
         if 'Item' not in user_response:
