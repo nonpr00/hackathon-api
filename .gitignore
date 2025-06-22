@@ -1,2 +1,9 @@
 ##diagrams/
 not_yet/
+
+__pycache__/
+.python-version
+.venv/
+.env
+venv/
+package/

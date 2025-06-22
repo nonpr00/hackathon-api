@@ -9,6 +9,14 @@ provider:
   iam:
     role: arn:aws:iam::902996284231:role/LabRole
 
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer: true
+
 functions:
   RegisterUser:
     handler: user/RegisterUser.lambda_handler
