@@ -16,7 +16,7 @@ functions:
       - http:
           path: user/register
           method: post
-          cors: http://localhost:5173
+          cors: true
           integration: lambda
     timeout: 29
 
@@ -26,7 +26,7 @@ functions:
       - http:
           path: user/login
           method: post
-          cors: http://localhost:5173
+          cors: true
           integration: lambda
     timeout: 29
 
@@ -36,7 +36,7 @@ functions:
       - http:
           path: user/verify
           method: post
-          cors: http://localhost:5173
+          cors: true
           integration: lambda
     timeout: 29
 
@@ -46,7 +46,7 @@ functions:
       - http:
           path: user/login
           method: options
-          cors: http://localhost:5173
+          cors: true
 
   PreflightRegister:
     handler: user/Preflight.lambda_handler
@@ -54,7 +54,7 @@ functions:
       - http:
           path: user/register
           method: options
-          cors: http://localhost:5173
+          cors: true
 
   PreflightVerify:
     handler: user/Preflight.lambda_handler
@@ -62,4 +62,4 @@ functions:
       - http:
           path: user/verify
           method: options
-          cors: http://localhost:5173
+          cors: true
