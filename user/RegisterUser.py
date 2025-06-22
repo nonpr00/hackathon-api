@@ -10,8 +10,11 @@ def hash_password(password):
 def lambda_handler(event, context):
     try:
         # Obtener el email y el password
-        user_id = event.get('user_id')
-        password = event.get('password')
+        user_id = event['body']['user_id']
+        #get('user_id')
+        #event['body']['tenant_id']
+        password = event['body']['password']
+        #get('password')
         
         # Verificar que el email y el password existen
         if user_id and password:
