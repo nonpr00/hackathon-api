@@ -17,7 +17,7 @@ functions:
           path: user/register
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy
     timeout: 29
 
   LoginUsuario:
@@ -37,7 +37,7 @@ functions:
           path: user/verify
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy
     timeout: 29
 
   PreflightLogin:
