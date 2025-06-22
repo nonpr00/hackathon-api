@@ -5,9 +5,9 @@ provider:
   name: aws
   runtime: python3.12
   region: us-east-1
-  timeout: 29  # Aplica como valor por defecto
+  timeout: 29
   iam:
-    role: arn:aws:iam::902996284231:role/LabRole  # Usa un rol existente que ya tengas permiso para usar
+    role: arn:aws:iam::902996284231:role/LabRole
 
 functions:
   RegisterUser:
@@ -16,9 +16,9 @@ functions:
       - http:
           path: user/register
           method: post
-          cors: 
-            origin: http://localhost:5173  # <--- especifica tu frontend
-            credentials: true              # <--- habilita credenciales
+          cors:
+            origin: http://localhost:5173
+            credentials: true
           integration: lambda
     timeout: 29
 
@@ -28,7 +28,9 @@ functions:
       - http:
           path: user/login
           method: post
-          cors: true
+          cors:
+            origin: http://localhost:5173
+            credentials: true
           integration: lambda
     timeout: 29
 
@@ -38,6 +40,38 @@ functions:
       - http:
           path: user/verify
           method: post
-          cors: true
+          cors:
+            origin: http://localhost:5173
+            credentials: true
           integration: lambda
     timeout: 29
+
+  PreflightLogin:
+    handler: user/Preflight.lambda_handler
+    events:
+      - http:
+          path: user/login
+          method: options
+          cors:
+            origin: http://localhost:5173
+            credentials: true
+
+  PreflightRegister:
+    handler: user/Preflight.lambda_handler
+    events:
+      - http:
+          path: user/register
+          method: options
+          cors:
+            origin: http://localhost:5173
+            credentials: true
+
+  PreflightVerify:
+    handler: user/Preflight.lambda_handler
+    events:
+      - http:
+          path: user/verify
+          method: options
+          cors:
+            origin: http://localhost:5173
+            credentials: true
