@@ -1,0 +1,44 @@
+org: organizacion
+service: auth-service
+
+provider:
+  name: aws
+  runtime: python3.12
+  timeout: 30
+  region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+          Resource:
+            - arn:aws:dynamodb:us-east-1:902996284231:table/t_usuarios
+            - arn:aws:dynamodb:us-east-1:902996284231:table/t_tokens_acceso
+
+functions:
+  RegisterUser:
+    handler: user/RegisterUser.lambda_handler
+    events:
+      - http:
+          path: users/register
+          method: post
+          cors: true
+
+  LoginUsuario:
+    handler: user/LoginUsuario.lambda_handler
+    events:
+      - http:
+          path: users/login
+          method: post
+          cors: true
+
+  VerifyToken:
+    handler: user/VerifyToken.lambda_handler
+    events:
+      - http:
+          path: users/verifytoken
+          method: post
+          cors: true
