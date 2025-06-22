@@ -20,7 +20,7 @@ def lambda_handler(event, context):
         token = body['token']
 
         dynamodb = boto3.resource('dynamodb')
-        tokens_table = dynamodb.Table('t_tokens_acceso')
+        tokens_table = dynamodb.Table('t_tokens_access')
 
         # Verificar si el token existe
         response = tokens_table.get_item(Key={'token': token})
