@@ -1,6 +1,8 @@
 import json
 import boto3
 import hashlib
+import uuid
+from datetime import datetime, timedelta
 
 headers = {
     "Access-Control-Allow-Origin": "http://localhost:5173",
@@ -9,7 +11,6 @@ headers = {
 
 # Hashear contraseña
 def hash_password(password):
-    # Retorna la contraseña hasheada
     return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
@@ -33,6 +34,7 @@ def lambda_handler(event, context):
         for field in required_fields:
             if field not in body or not body[field]:
                 return {
+                    "headers": headers,
                     "statusCode": 400,
                     "body": json.dumps({"error": f"El campo '{field}' es obligatorio"})
                 }
@@ -43,19 +45,32 @@ def lambda_handler(event, context):
         username = body['username']
         password = body['password']
 
-        # Hashear la contraseña antes de guardar
+        # Hashear la contraseña
         hashed_password = hash_password(password)
 
         # Guardar en DynamoDB
         dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table('t_users')
+        users_table = dynamodb.Table('t_users')
 
-        table.put_item(
+        users_table.put_item(
             Item={
                 'user_id': user_id,
                 'email': email,
                 'username': username,
                 'password': hashed_password
+            }
+        )
+
+        # Generar token
+        token = str(uuid.uuid4())
+        expires_at = (datetime.now() + timedelta(minutes=60)).strftime('%Y-%m-%d %H:%M:%S')
+
+        tokens_table = dynamodb.Table('t_tokens_access')
+        tokens_table.put_item(
+            Item={
+                'token': token,
+                'expires': expires_at,
+                'user_id': user_id
             }
         )
 
@@ -66,7 +81,8 @@ def lambda_handler(event, context):
                 "message": "Usuario registrado exitosamente",
                 "user_id": user_id,
                 "email": email,
-                "username": username
+                "username": username,
+                "token": token
             })
         }
 
