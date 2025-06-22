@@ -27,7 +27,7 @@ functions:
           path: user/login
           method: post
           cors: true
-          integration: lambda
+          integration: lambda-proxy
     timeout: 29
 
   VerifyToken:
