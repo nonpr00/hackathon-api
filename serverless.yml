@@ -39,7 +39,17 @@ functions:
           cors: true
           integration: lambda-proxy
     timeout: 29
-
+  WithJSON:
+    handler: user/WithJSON.lambda_handler
+    events:
+      - http:
+          path: user/with-json
+          method: post
+          cors:
+            origin: http://localhost:5173
+            credentials: true
+          integration: lambda-proxy
+    timeout: 29
   PreflightLogin:
     handler: user/Preflight.lambda_handler
     events:

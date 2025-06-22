@@ -5,7 +5,7 @@ import json
 headers = {
     "Access-Control-Allow-Origin": "http://localhost:5173",
     "Access-Control-Allow-Credentials": "true",
-    "Content-Type": "application/json"
+    #"Content-Type": "application/json"
 }
 
 def lambda_handler(event, context):
