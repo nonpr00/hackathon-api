@@ -1,35 +1,46 @@
 import boto3
 import hashlib
-import uuid # Genera valores únicos
+import uuid
 from datetime import datetime, timedelta
+import json
 
 # Hashear contraseña
 def hash_password(password):
-    # Retorna la contraseña hasheada
     return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
-    # Entrada (json)
-    user_id = event['user_id']
-    password = event['password']
-    hashed_password = hash_password(password)
-    # Proceso
-    dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('t_users')
-    response = table.get_item(
-        Key={
-            'user_id': user_id
-        }
-    )
-    if 'Item' not in response:
-        return {
-            'statusCode': 403,
-            'body': 'Usuario no existe'
-        }
-    else:
+    try:
+        # Parsear el body
+        if 'body' not in event:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': 'No se encontró el body en el request'})
+            }
+
+        if isinstance(event['body'], str):
+            body = json.loads(event['body'])
+        else:
+            body = event['body']
+
+        # Extraer campos
+        user_id = body['user_id']
+        password = body['password']
+        hashed_password = hash_password(password)
+
+        # Buscar usuario
+        dynamodb = boto3.resource('dynamodb')
+        table = dynamodb.Table('t_users')
+        response = table.get_item(Key={'user_id': user_id})
+
+        if 'Item' not in response:
+            return {
+                'statusCode': 403,
+                'body': json.dumps({'error': 'Usuario no existe'})
+            }
+
         hashed_password_bd = response['Item']['password']
         if hashed_password == hashed_password_bd:
-            # Genera token
+            # Generar token y guardar
             token = str(uuid.uuid4())
             fecha_hora_exp = datetime.now() + timedelta(minutes=60)
             registro = {
@@ -37,15 +48,21 @@ def lambda_handler(event, context):
                 'expires': fecha_hora_exp.strftime('%Y-%m-%d %H:%M:%S')
             }
             table = dynamodb.Table('t_tokens_acceso')
-            dynamodbResponse = table.put_item(Item = registro)
+            table.put_item(Item=registro)
+
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'token': token})
+            }
+
         else:
             return {
                 'statusCode': 403,
-                'body': 'Password incorrecto'
+                'body': json.dumps({'error': 'Password incorrecto'})
             }
-    
-    # Salida (json)
-    return {
-        'statusCode': 200,
-        'token': token
-    }
+
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': f'Error interno: {str(e)}'})
+        }
