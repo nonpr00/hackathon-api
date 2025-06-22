@@ -4,6 +4,11 @@ import uuid
 from datetime import datetime, timedelta
 import json
 
+headers = {
+    "Access-Control-Allow-Origin": "http://localhost:5173",
+    "Access-Control-Allow-Credentials": "true"
+}
+
 # Hashear contraseña
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
@@ -14,6 +19,7 @@ def lambda_handler(event, context):
         if 'body' not in event:
             return {
                 'statusCode': 400,
+                "headers": headers,
                 'body': json.dumps({'error': 'No se encontró el body en el request'})
             }
 
@@ -26,6 +32,7 @@ def lambda_handler(event, context):
         if 'email' not in body or 'password' not in body:
             return {
                 'statusCode': 400,
+                "headers": headers,
                 'body': json.dumps({'error': 'Faltan campos obligatorios: email o password'})
             }
 
@@ -44,6 +51,7 @@ def lambda_handler(event, context):
         if not response['Items']:
             return {
                 'statusCode': 403,
+                "headers": headers,
                 'body': json.dumps({'error': 'Usuario no existe'})
             }
 
@@ -63,17 +71,20 @@ def lambda_handler(event, context):
 
             return {
                 'statusCode': 200,
+                "headers": headers,
                 'body': json.dumps({'token': token})
             }
 
         else:
             return {
                 'statusCode': 403,
+                "headers": headers,
                 'body': json.dumps({'error': 'Password incorrecto'})
             }
 
     except Exception as e:
         return {
             'statusCode': 500,
+            "headers": headers,
             'body': json.dumps({'error': f'Error interno: {str(e)}'})
         }

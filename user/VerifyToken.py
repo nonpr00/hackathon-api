@@ -2,12 +2,18 @@ import boto3
 from datetime import datetime
 import json
 
+headers = {
+    "Access-Control-Allow-Origin": "http://localhost:5173",
+    "Access-Control-Allow-Credentials": "true"
+}
+
 def lambda_handler(event, context):
     try:
         # Verificar y parsear el body
         if 'body' not in event:
             return {
                 'statusCode': 400,
+                "headers": headers,
                 'body': json.dumps({'error': 'No se encontró el body en el request'})
             }
 
@@ -27,6 +33,7 @@ def lambda_handler(event, context):
         if 'Item' not in response:
             return {
                 'statusCode': 403,
+                "headers": headers,
                 'body': json.dumps({'error': 'Token no existe'})
             }
 
@@ -37,6 +44,7 @@ def lambda_handler(event, context):
         if now > expires:
             return {
                 'statusCode': 403,
+                "headers": headers,
                 'body': json.dumps({'error': 'Token expirado'})
             }
 
@@ -48,6 +56,7 @@ def lambda_handler(event, context):
         if 'Item' not in user_response:
             return {
                 'statusCode': 404,
+                "headers": headers,
                 'body': json.dumps({'error': 'Usuario no encontrado'})
             }
 
@@ -57,11 +66,13 @@ def lambda_handler(event, context):
 
         return {
             'statusCode': 200,
+            "headers": headers,
             'body': json.dumps({'message': 'Token válido', 'user': user_info})
         }
 
     except Exception as e:
         return {
             'statusCode': 500,
+            "headers": headers,
             'body': json.dumps({'error': f'Error interno: {str(e)}'})
         }

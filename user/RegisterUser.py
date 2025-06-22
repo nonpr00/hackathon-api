@@ -2,6 +2,11 @@ import json
 import boto3
 import hashlib
 
+headers = {
+    "Access-Control-Allow-Origin": "http://localhost:5173",
+    "Access-Control-Allow-Credentials": "true"
+}
+
 # Hashear contraseña
 def hash_password(password):
     # Retorna la contraseña hasheada
@@ -12,6 +17,7 @@ def lambda_handler(event, context):
         # Verificar que el body esté presente
         if 'body' not in event:
             return {
+                "headers": headers,
                 "statusCode": 400,
                 "body": json.dumps({"error": "No se encontró el body en el request"})
             }
@@ -54,6 +60,7 @@ def lambda_handler(event, context):
         )
 
         return {
+            "headers": headers,
             "statusCode": 200,
             "body": json.dumps({
                 "message": "Usuario registrado exitosamente",
@@ -66,5 +73,6 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             "statusCode": 500,
+            "headers": headers,
             "body": json.dumps({"error": f"Error interno: {str(e)}"})
         }
