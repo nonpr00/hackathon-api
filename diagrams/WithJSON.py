@@ -32,6 +32,8 @@ def parse_json(obj, parent_key, graph):
         graph.add_edge(parent_key, value_node)
 
 def lambda_handler(event, context):
+    print("Evento recibido:", event)
+
     try:
         if 'body' not in event:
             return {
@@ -104,6 +106,8 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
+        import traceback
+        print("ERROR:", traceback.format_exc())
         return {
             "headers": headers,
             "statusCode": 500,
