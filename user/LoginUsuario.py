@@ -66,7 +66,7 @@ def lambda_handler(event, context):
                 'user_id': user['user_id']
             }
 
-            tokens_table = dynamodb.Table('t_tokens_acceso')
+            tokens_table = dynamodb.Table('t_tokens_access')
             tokens_table.put_item(Item=registro)
 
             return {
