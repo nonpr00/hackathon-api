@@ -16,7 +16,9 @@ functions:
       - http:
           path: user/register
           method: post
-          cors: true
+          cors: 
+            origin: http://localhost:5173  # <--- especifica tu frontend
+            credentials: true              # <--- habilita credenciales
           integration: lambda
     timeout: 29
 
