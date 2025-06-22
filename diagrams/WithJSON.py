@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 # Parámetros de configuración
-BUCKET_NAME = 'tu-nombre-de-bucket'  # Reemplázalo por el tuyo
+BUCKET_NAME = 'utec-diagrams'
 
 headers = {
     "Access-Control-Allow-Origin": "http://localhost:5173",
