@@ -1,44 +1,41 @@
-org: onlyuml
+org: pieropilco
 service: diagrams-serverless
 
 provider:
   name: aws
   runtime: python3.12
-  timeout: 30
   region: us-east-1
+  timeout: 29  # Aplica como valor por defecto
   iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-          Resource:
-            - arn:aws:dynamodb:us-east-1:902996284231:table/t_usuarios
-            - arn:aws:dynamodb:us-east-1:902996284231:table/t_tokens_acceso
+    role: arn:aws:iam::902996284231:role/LabRole  # Usa un rol existente que ya tengas permiso para usar
 
 functions:
   RegisterUser:
     handler: user/RegisterUser.lambda_handler
     events:
       - http:
-          path: users/register
+          path: user/register
           method: post
           cors: true
+          integration: lambda
+    timeout: 29
 
   LoginUsuario:
     handler: user/LoginUsuario.lambda_handler
     events:
       - http:
-          path: users/login
+          path: user/login
           method: post
           cors: true
+          integration: lambda
+    timeout: 29
 
   VerifyToken:
     handler: user/VerifyToken.lambda_handler
     events:
       - http:
-          path: users/verifytoken
+          path: user/verify
           method: post
           cors: true
+          integration: lambda
+    timeout: 29
