@@ -47,6 +47,7 @@ functions:
           cors: true
           integration: lambda-proxy
     timeout: 29
+  
   WithJSON:
     handler: diagrams/WithJSON.lambda_handler
     layers:
@@ -58,6 +59,7 @@ functions:
           cors: true
           integration: lambda-proxy
     timeout: 29
+
   PreflightLogin:
     handler: user/Preflight.lambda_handler
     events:
