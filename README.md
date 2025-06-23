@@ -36,6 +36,7 @@
 **Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/user/login
 
 **Descripción:** Autentica a un usuario existente y devuelve un token.
+
 **Cuerpo esperado (JSON):**
 
 ```json
@@ -63,6 +64,7 @@
 **Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/user/verify
 
 **Descripción:** Verifica si un token enviado es válido y no ha expirado.
+
 **Cuerpo esperado (JSON):**
 
 ```json
@@ -89,6 +91,7 @@
 **Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/diagrams/with-json
 
 **Descripción:** Recibe un objeto JSON y genera un grafo - diagrama representativo (como imagen JPG).
+
 **Cuerpo esperado (JSON):**
 
 ```json
