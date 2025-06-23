@@ -3,6 +3,7 @@
 ## 1. Register User
 
 **Endpoint:** `POST /user/register`
+**Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/user/register
 **Descripción:** Registra un nuevo usuario en el sistema.
 **Cuerpo esperado (JSON):**
 
@@ -28,6 +29,7 @@
 ## 2. Login Usuario
 
 **Endpoint:** `POST /user/login`
+**Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/user/login
 **Descripción:** Autentica a un usuario existente y devuelve un token.
 **Cuerpo esperado (JSON):**
 
@@ -52,6 +54,7 @@
 ## 3. Verificar Token
 
 **Endpoint:** `POST /user/verify`
+**Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/user/verify
 **Descripción:** Verifica si un token enviado es válido y no ha expirado.
 **Cuerpo esperado (JSON):**
 
@@ -75,6 +78,7 @@
 ## 4. Generar Diagrama con JSON
 
 **Endpoint:** `POST /diagrams/with-json`
+**Link:** https://lnvew987t4.execute-api.us-east-1.amazonaws.com/dev/diagrams/with-json
 **Descripción:** Recibe un objeto JSON y genera un grafo - diagrama representativo (como imagen JPG).
 **Cuerpo esperado (JSON):**
 
